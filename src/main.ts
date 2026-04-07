@@ -4,6 +4,7 @@ import * as wgpu from 'three/webgpu';
 import * as tsl from 'three/tsl';
 import { WebGLNodesHandler } from 'three/addons/tsl/WebGLNodesHandler.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import LasLoader from './LasLoader.js';
 
 let controls: OrbitControls;
 let camera: THREE.PerspectiveCamera;
