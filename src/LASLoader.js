@@ -4,7 +4,7 @@ import { LazPerf } from 'laz-perf';
 import { Las } from 'copc';
 import proj4 from 'proj4';
 // eslint-disable-next-line import/extensions
-import { LASAttributes } from './LASConstant.ts';
+import { LASAttributes } from './LASConstant.js';
 
 const LASAttributesName = LASAttributes.filter(a => a.size === undefined).map(a => a.name);
 
@@ -60,10 +60,6 @@ class LASLoader {
   }
 
   _parseView(view, options) {
-    const forward = (options.in.crs !== options.out.crs) ?
-      proj4(options.in.projDefs, options.out.projDefs).forward :
-      (x => x);
-
     const getPosition = ['X', 'Y', 'Z'].map(view.getter);
 
     const attributes = {
@@ -101,15 +97,15 @@ class LASLoader {
     The copc.js library does the degree convertion and stores it as a `Float32`.
     */
 
-    origin.fromArray(options.out.origin);
-    quaternion.fromArray(options.out.rotation);
+    origin.fromArray(options.out?.origin ?? [0, 0, 0]);
+    quaternion.fromArray(options.out?.rotation ?? [0, 0, 0, 0]);
     box.makeEmpty();
 
     for (let i = 0; i < view.pointCount; i++) {
       // `getPosition` apply scale and offset transform to the X, Y, Z
       // values. See https://github.com/connormanning/copc.js/blob/master/src/las/extractor.ts.
       // we thus apply the projection to get values in the Crs of the view.
-      position.fromArray(forward(getPosition.map(f => f(i))));
+      position.fromArray(getPosition.map(f => f(i)));
       position.sub(origin).applyQuaternion(quaternion);
       position.toArray(attributes.positions, i * 3);
       box.expandByPoint(position);

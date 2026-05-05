@@ -3,7 +3,7 @@ import { spawn, Thread, Transfer } from 'threads';
 import proj4 from 'proj4';
 import { LASAttributes } from './LASConstant.ts';
 
-let _lazPerf: string | undefined;
+let _lazPerf;
 let _thread;
 
 function workerInstance() {
@@ -21,11 +21,11 @@ async function loader() {
   return _thread;
 }
 
-function buildBufferGeometry(attributes: Record<string, THREE.TypedArray>) {
+function buildBufferGeometry(attributes) {
   const geometry = new THREE.BufferGeometry();
 
   Object.keys(attributes).forEach((attributeName) => {
-    const { bufferName, size, normalized } = LASAttributes.find(a => a.name === attributeName)!;
+    const { bufferName, size, normalized } = LASAttributes.find(a => a.name === attributeName);
     geometry.setAttribute(bufferName, new THREE.BufferAttribute(attributes[attributeName], size || 1, normalized));
   });
 
@@ -45,7 +45,7 @@ export default {
    * Set the laz-perf decoder path.
    * @param path - path to `laz-perf.wasm` folder.
    */
-  enableLazPerf(path: string) {
+  enableLazPerf(path) {
     if (!path) {
       throw new Error('Path to laz-perf is mandatory');
     }
@@ -85,21 +85,7 @@ export default {
    * @return {Promise<THREE.BufferGeometry>} A promise resolving with a
    * `THREE.BufferGeometry`.
    */
-  async parseChunk(data: ArrayBuffer, options: Partial<{
-    in: {
-      numPoints: number,
-      source: {
-        header: {
-          pointDataRecordFormat: number,
-          pointDataRecordLength: number,
-        },
-        eb: object,
-      },
-      colorDepth: 8 | 16,
-      origin: THREE.Vector3,
-      rotation: THREE.Vector3,
-    }
-  }> = {}): Promise<THREE.BufferGeometry> {
+  async parseChunk(data, options = {}) {
     const lasLoader = await loader();
     const source = options.in?.source;
     const origin = options.in?.origin;

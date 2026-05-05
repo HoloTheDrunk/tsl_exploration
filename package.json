@@ -9,15 +9,16 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "typescript": "^5.8.2",
-    "vite": "^8.0.2"
+    "typescript": "^5.9.3",
+    "vite": "^8.0.9"
   },
   "dependencies": {
     "@types/three": "^0.182.0",
     "copc": "^0.0.8",
     "laz-perf": "^0.0.7",
-    "proj4": "^2.20.4",
+    "proj4": "^2.20.8",
     "threads": "^1.7.0",
-    "three": "mrdoob/three.js#dev"
+    "three": "mrdoob/three.js#dev",
+    "wkt-parser": "^1.5.5"
   }
 }
